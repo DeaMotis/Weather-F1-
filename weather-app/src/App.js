@@ -2,7 +2,10 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Weather from './components/Weather';
 import CitySelector from './components/CitySelector';
+import GeolocationComponent from './components/GeolocationComponent';
 import YandexMap from './YandexMap';
+import WeatherComponent from './components//WeatherComponent';
+
 
 const App = () => {
     const [cities, setCities] = useState([]);
@@ -36,10 +39,12 @@ const App = () => {
 
     return (
         <div className="App">
-        <CitySelector cities={cities} onCityChange={handleCityChange} />
-        {weatherData && <Weather data={weatherData} />}
+            <CitySelector cities={cities} onCityChange={handleCityChange} />
+            <GeolocationComponent />
+            <WeatherComponent />
+            {weatherData && <Weather data={weatherData} />}
         </div>
     );
-    };
+};
 
 export default App;
