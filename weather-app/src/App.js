@@ -1,8 +1,8 @@
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Weather from './components/Weather';
 import CitySelector from './components/CitySelector';
+import YandexMap from './YandexMap';
 
 const App = () => {
     const [cities, setCities] = useState([]);
@@ -11,9 +11,13 @@ const App = () => {
     const [apiKey] = useState('bfefdb8a01b37af196eb9862aec3cbb9');
 
     useEffect(() => {
-    // Получаем список городов (можно использовать статический массив)
-        const cityList = ['Москва', 'Санкт-Петербург', 'Казань', 'Новосибирск', 'Екатеринбург'];
-        setCities(cityList);
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                const lat = position.coords.latitude;
+                const lon = position.coords.longitude;
+                setLocation({ lat, lon });
+            });
+        }
     }, []);
 
     const fetchWeatherData = async (city) => {
