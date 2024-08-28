@@ -1,5 +1,6 @@
 # Node modules
 node_modules/
+weather-app/node_modules/
 
 # Build outputs
 build/
@@ -22,6 +23,7 @@ coverage/
 .vscode/
 *.sublime-project
 *.sublime-workspace
+weather-app/.idea/
 
 # System files
 .DS_Store
