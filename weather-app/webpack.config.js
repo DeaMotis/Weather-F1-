@@ -2,15 +2,24 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-    entry: './src/index.js', // ваш входной файл
+    entry: './src/index.js',
     output: {
-        filename: 'bundle.js', // имя собранного файла
-        path: path.resolve(__dirname, 'dist'), // путь к папке с выходным файлом
+        filename: 'js/[name].[contenthash].js',
+        path: path.resolve(__dirname, 'public'),
+        clean: true,
+        publicPath: '/',
     },
     module: {
         rules: [
             {
-                test: /\.css$/,
+                test: /\.js$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: 'babel-loader',
+                },
+            },
+            {
+                test: /\.css$/, // Обработка CSS файлов
                 use: [
                     'style-loader',
                     'css-loader',
@@ -18,27 +27,31 @@ module.exports = {
                         loader: 'postcss-loader',
                         options: {
                             postcssOptions: {
-                                plugins: [
-                                    require('autoprefixer'), // или другие плагины PostCSS
-                                ],
+                                plugins: [require('autoprefixer')],
                             },
                         },
                     },
                 ],
             },
+            {
+                test: /\.(png|jpg|gif|svg)$/, // Обработка изображений
+                type: 'asset/resource',
+            },
         ],
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: './src/index.html', // путь к вашему шаблону HTML
+            template: './src/index.html',
+            filename: 'index.html',
         }),
     ],
     devServer: {
         static: {
-            directory: path.join(__dirname, 'dist'), // указать папку с файлами
+            directory: path.join(__dirname, 'public'),
         },
         compress: true,
-        port: 9000, // любой свободный порт
-        open: true, // автоматически открывать браузер
+        port: 9000,
+        open: true,
+        historyApiFallback: true,
     },
 };

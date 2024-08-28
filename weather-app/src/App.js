@@ -1,47 +1,42 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Weather from './components/Weather';
-import CitySelector from './components/CitySelector';
 import GeolocationComponent from './components/GeolocationComponent';
-import YandexMap from './YandexMap';
-import WeatherComponent from './components//WeatherComponent';
-
+import WeatherComponent from './components/WeatherComponent';
 
 const App = () => {
-    const [cities, setCities] = useState([]);
-    const [selectedCity, setSelectedCity] = useState('');
     const [weatherData, setWeatherData] = useState(null);
     const [apiKey] = useState('bfefdb8a01b37af196eb9862aec3cbb9');
 
+    // Получаем геолокацию пользователя
     useEffect(() => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((position) => {
                 const lat = position.coords.latitude;
                 const lon = position.coords.longitude;
-                setLocation({ lat, lon });
             });
         }
     }, []);
 
+    // Функция для получения данных о погоде
     const fetchWeatherData = async (city) => {
         try {
-        const response = await axios.get('https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric');
-        setWeatherData(response.data);
+            const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`);
+            setWeatherData(response.data);
         } catch (error) {
-        console.error('Error fetching weather data:', error);
+            console.error('Error fetching weather data:', error);
         }
     };
 
+    // Обработчик изменения выбранного города, который передадим в WeatherComponent
     const handleCityChange = (city) => {
-        setSelectedCity(city);
         fetchWeatherData(city);
     };
 
     return (
         <div className="App">
-            <CitySelector cities={cities} onCityChange={handleCityChange} />
+            <WeatherComponent onCityChange={handleCityChange} />
             <GeolocationComponent />
-            <WeatherComponent />
             {weatherData && <Weather data={weatherData} />}
         </div>
     );

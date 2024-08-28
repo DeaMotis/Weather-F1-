@@ -1,5 +1,5 @@
-javascript
 import React, { useState, useEffect } from 'react';
+import coverImage from '../media/cover.jpg';
 
 const GeolocationComponent = () => {
     const [location, setLocation] = useState({ latitude: null, longitude: null });
